@@ -28,21 +28,13 @@ public class Employee {
         return Objects.equals(email, employee.email);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email);
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
     public boolean isBirthdayOn(LocalDate localDate) {
         return this.dateOfBirth.getMonth() == localDate.getMonth() &&
                 this.dateOfBirth.getDayOfMonth() == localDate.getDayOfMonth();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
     }
 }

@@ -6,6 +6,6 @@ import com.tdd.app.domain.Mail;
 
 public class FakeEmailService implements EmailService {
     public Mail sendMail(Employee employee) {
-        return new Mail(employee.getEmail(), String.format("Happy birthday, dear %s!", employee.getFirstName()), "Happy birthday!");
+        return new Mail(employee.email, String.format("Happy birthday, dear %s!", employee.firstName), "Happy birthday!");
     }
 }
