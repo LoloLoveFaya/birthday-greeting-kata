@@ -6,19 +6,23 @@ import com.tdd.app.domain.Employee;
 import com.tdd.app.domain.EmployeeRepository;
 import com.tdd.app.domain.Mail;
 import com.tdd.app.infrastructure.EmployeeDataSourceRepository;
-import com.tdd.app.infrastructure.FakeEmailService;
+import com.tdd.app.infrastructure.MailTrapEmailService;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BirthdayServiceTest {
 
     @Test
     public void shouldNotSendGreetingsWithNoEmployees() {
-        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(List::of);
-        EmailService emailService = new FakeEmailService();
+        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(ArrayList::new);
+        EmailService emailService = getEmailService();
         BirthdayService birthdayService = new BirthdayService(employeeRepository, emailService);
 
         List<Mail> sentMails = birthdayService.sendGreetings(LocalDate.now());
@@ -27,12 +31,14 @@ public class BirthdayServiceTest {
     }
 
     @Test
-    public void shouldNotSendGreetingsWhenNoOneBirthday(){
-        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> List.of(
-                new Employee("Doe", "John", LocalDate.of(1982, 10, 8), "john.doe@foobar.com"),
-                new Employee("Ann", "Mary", LocalDate.of(1975, 9, 11), "mary.ann@foobar.com")
+    public void shouldNotSendGreetingsWhenNoOneBirthday() {
+        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> Arrays.asList(
+                new Employee("Doe", "John", LocalDate.of(1982, 10, 8),
+                        "john.doe@foobar.com"),
+                new Employee("Ann", "Mary", LocalDate.of(1975, 9, 11),
+                        "mary.ann@foobar.com")
         ));
-        EmailService emailService = new FakeEmailService();
+        EmailService emailService = getEmailService();
         BirthdayService birthdayService = new BirthdayService(employeeRepository, emailService);
 
         List<Mail> sentMails = birthdayService.sendGreetings(LocalDate.of(2021, 1, 1));
@@ -41,12 +47,14 @@ public class BirthdayServiceTest {
     }
 
     @Test
-    public void shouldSendOneGreeting(){
-        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> List.of(
-                new Employee("Doe", "John", LocalDate.of(1982, 10, 8), "john.doe@foobar.com"),
-                new Employee("Ann", "Mary", LocalDate.of(1975, 5, 11), "mary.ann@foobar.com")
+    public void shouldSendOneGreeting() {
+        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> Arrays.asList(
+                new Employee("Doe", "John", LocalDate.of(1982, 10, 8),
+                        "john.doe@foobar.com"),
+                new Employee("Ann", "Mary", LocalDate.of(1975, 5, 11),
+                        "mary.ann@foobar.com")
         ));
-        EmailService emailService = new FakeEmailService();
+        EmailService emailService = getEmailService();
         BirthdayService birthdayService = new BirthdayService(employeeRepository, emailService);
 
         List<Mail> sentMails = birthdayService.sendGreetings(LocalDate.of(2021, 5, 11));
@@ -58,12 +66,14 @@ public class BirthdayServiceTest {
     }
 
     @Test
-    public void shouldSendManyGreetings(){
-        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> List.of(
-                new Employee("Doe", "John", LocalDate.of(1982, 9, 11), "john.doe@foobar.com"),
-                new Employee("Ann", "Mary", LocalDate.of(1975, 9, 11), "mary.ann@foobar.com")
+    public void shouldSendManyGreetings() {
+        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> Arrays.asList(
+                new Employee("Doe", "John", LocalDate.of(1982, 9, 11),
+                        "john.doe@foobar.com"),
+                new Employee("Ann", "Mary", LocalDate.of(1975, 9, 11),
+                        "mary.ann@foobar.com")
         ));
-        EmailService emailService = new FakeEmailService();
+        EmailService emailService = getEmailService();
         BirthdayService birthdayService = new BirthdayService(employeeRepository, emailService);
 
         List<Mail> sentMails = birthdayService.sendGreetings(LocalDate.of(2021, 9, 11));
@@ -78,4 +88,10 @@ public class BirthdayServiceTest {
         assertEquals("Happy birthday, dear Mary!", sentMails.get(1).content);
         assertEquals("Happy birthday!", sentMails.get(1).subject);
     }
+
+    private EmailService getEmailService() {
+        //return new FakeEmailService();
+        return new MailTrapEmailService();
+    }
+
 }

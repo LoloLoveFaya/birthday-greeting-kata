@@ -8,9 +8,9 @@ public class Mail {
 
     public String subject;
 
-    public Mail(String recipient, String content, String subject) {
-        this.recipient = recipient;
-        this.content = content;
-        this.subject = subject;
+    public Mail(MailBuilder mailBuilder) {
+        this.recipient = mailBuilder.recipient;
+        this.content = mailBuilder.content;
+        this.subject = mailBuilder.subject;
     }
 }
