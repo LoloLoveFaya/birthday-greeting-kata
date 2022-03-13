@@ -8,6 +8,8 @@ import org.junit.Test;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -16,7 +18,7 @@ public class EmployeeDataSourceRepositoryTest {
 
     @Test
     public void shouldReadNoEmployees() {
-        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> List.of());
+        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(ArrayList::new);
 
         List<Employee> employeesList = employeeRepository.getEmployees();
 
@@ -25,7 +27,9 @@ public class EmployeeDataSourceRepositoryTest {
 
     @Test
     public void shouldReadOneEmployee() {
-        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> List.of(new Employee("Robert", "Zane", LocalDate.of(1994, 8, 16), "robzane@mail.fr")));
+        EmployeeRepository employeeRepository = new EmployeeDataSourceRepository(() -> Arrays.asList(
+                new Employee("Robert", "Zane", LocalDate.of(1994, 8, 16),
+                        "robzane@mail.fr")));
 
         List<Employee> employeesList = employeeRepository.getEmployees();
 
